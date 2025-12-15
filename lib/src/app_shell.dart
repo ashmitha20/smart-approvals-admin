@@ -178,7 +178,9 @@ import 'package:flutter/material.dart';
 import 'screens/basic_details_screen.dart';
 import 'screens/design_form_screen.dart';
 import 'screens/approval_levels_screen.dart';
-import 'services/file_service.dart'; // <-- added
+import 'screens/dashboard_screen.dart';
+import 'screens/all_procedures_screen.dart'; // <-- added
+import 'services/file_service.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -231,6 +233,8 @@ class _AppShellState extends State<AppShell> {
                 const SizedBox(height: 20),
                 _sidebarItem(Icons.dashboard_outlined, 'Dashboard', 0),
                 const SizedBox(height: 10),
+                _sidebarItem(Icons.list_alt_outlined, 'Procedures', 2), // Index 2 for All Procedures
+                const SizedBox(height: 10),
                 _sidebarItem(Icons.admin_panel_settings_outlined, 'Admin', 1),
                 const Spacer(),
                 InkWell(onTap: () {}, child: Row(children: const [Icon(Icons.logout, color: Colors.red), SizedBox(width: 8), Text('Logout', style: TextStyle(color: Colors.red))])),
@@ -251,7 +255,11 @@ class _AppShellState extends State<AppShell> {
               child: Row(children: [
                 Expanded(
                   child: Text(
-                    _selectedIndex == 0 ? 'Dashboard' : 'Admin',
+                    _selectedIndex == 0
+                        ? 'Dashboard'
+                        : _selectedIndex == 2
+                            ? 'Procedures'
+                            : 'Admin',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
@@ -281,8 +289,10 @@ class _AppShellState extends State<AppShell> {
                 color: Colors.grey.shade50,
                 padding: const EdgeInsets.all(22),
                 child: _selectedIndex == 0
-                    ? Center(child: Text('Dashboard (empty for now)', style: Theme.of(context).textTheme.bodyLarge))
-                    : _adminArea(),
+                    ? const DashboardScreen()
+                    : _selectedIndex == 2
+                        ? const AllProceduresScreen()
+                        : _adminArea(),
               ),
             )
           ]),
